@@ -440,9 +440,27 @@ function toStringList(arr) {
  *      { country: 'Russia',  city: 'Saint Petersburg' }
  *    ]
  */
-function sortCitiesArray(/* arr */) {
-  throw new Error('Not implemented');
+function sortCitiesArray(arr) {
+  return arr.sort((a, b) => {
+    if (a.country < b.country) {
+      return -1;
+    }
+    if (a.country > b.country) {
+      return 1;
+    }
+    if (a.country === b.country) {
+      if (a.city < b.city) {
+        return -1;
+      }
+      if (a.city > b.city) {
+        return 1;
+      }
+    }
+
+    return 0;
+  });
 }
+
 
 /**
  * Creates an identity matrix of the specified size
@@ -532,10 +550,18 @@ function distinct(arr) {
  *    "Poland" => ["Lodz"]
  *   }
  */
-function group(/* array, keySelector, valueSelector */) {
-  throw new Error('Not implemented');
+function group(array, keySelector, valueSelector) {
+  return array.reduce((groupMap, l) => {
+    if (groupMap.has(keySelector(l))) {
+      const elArr = groupMap.get(keySelector(l));
+      elArr.push(valueSelector(l));
+      groupMap.set(keySelector(l), elArr);
+    } else {
+      groupMap.set(keySelector(l), [valueSelector(l)]);
+    }
+    return groupMap;
+  }, new Map());
 }
-
 
 /**
  * Projects each element of the specified array to a sequence
